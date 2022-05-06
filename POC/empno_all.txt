@@ -1,0 +1,117 @@
+##최종 수정일
+##2022-03-10
+d10270	2DC	양시은
+d10685	2DC	박송이
+
+d10284	2D1	손형록
+d10547	2D1	강민지C
+d19351	2D1	권은수
+d10580	2D1	오흥재
+d10719	2D1	차은서
+
+d10523	2D2	조다솔
+d10683	2D2	이유정
+d10527	2D2	김지희
+d10658	2D2	장효선
+d10720	2D2	손윤혜
+
+d10380	2D3	김지은
+d10400	2D3	김향옥
+d10661	2D3	이승연
+d19352	2D3	이현지
+
+d10381	2D4	이옥환
+d10594	2D4	윤우현
+d10665	2D4	백승권
+d19353	2D4	김혜주
+d10706	2D4	유지숙
+
+d10491	2D5	한태훈
+d10556	2D5	이영상
+d10616	2D5	양정연
+d10679	2D5	이은희
+d10702	2D5	김지수
+
+d10687  2D6     이진아
+d10705  2D6     이상헌
+d10725  2D6     이소영
+
+d10263	FX	정재화
+d10417	FX	권영국
+d10475	FX	신혜림
+d10632	FX	안현수
+d10635	FX	이성민
+d10640	FX	국두람
+d10663	FX	오은채
+d10693	FX	최재은
+d10633	FX	이인성
+d10645	FX	양준호
+d10713	FX	정담
+
+d10712	pipeline	류찬환
+
+d10576	Animation	염도선
+d10608	Animation	전민지
+d10629	Animation	김소나
+d10657	Animation	김은비
+d10691	Animation	강재윤
+d10694	Animation	안수지
+d10709	Animation	윤홍석
+
+d10678	CFX	이호현
+
+d10464	Environment	주지용
+d10575	Environment	김형기
+d10642	Environment	신기철
+d10656	Environment	장보희
+d10670	Environment	차현민
+d10700	Environment	김성미
+
+d10581	Lighting	김은옥
+d10583	Lighting	김세연
+d10606	Lighting	이선영
+d10651	Lighting	임지영
+d10669	Lighting	윤동욱
+d10684	Lighting	김동균
+d10708	Lighting	조성희
+
+d10652	MatchMove	이유민
+d10676	MatchMove	오선미
+d10692	MatchMove	최준하
+d19002	MatchMove	김의엽
+
+d19286	Modeling	김영화
+d10707	Modeling        이진희
+d10717	Modeling        박성수
+d10721	Modeling        이도현
+d10486	Modeling        김기현
+
+d10542	Previz	양은영
+
+d10582	Supervisor	양오석
+d10648	Supervisor	오창원
+d10697	Supervisor	원재현
+d10634	Supervisor	김경남
+d10022	Supervisor	박명성
+d19001	Supervisor	이경제
+
+d10637	Digital_Management	신윤호
+d10698	Digital_Management	박태현
+d10699	Digital_Management	정미현
+
+d10180	planning	최가영
+d10682	planning	장혜진
+
+d10482	pm_1	김지현
+d10483	pm_1	이보람
+d10570	pm_1	김파랑
+d10571	pm_1	심채원
+d10668	pm_1	허유림
+d10673	pm_1	고정인
+
+d10415	pm_2	이혜수
+d10440	pm_2	함혜진
+d10607	pm_2	박예슬
+d10641	pm_2	유지혜
+
+d10690	IT	최종성

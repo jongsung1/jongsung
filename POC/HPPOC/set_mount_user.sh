@@ -1,0 +1,101 @@
+#!/bin/bash
+
+##conf file import
+source /idea_backup/script/default/default_conf
+
+HOSTNAME=`hostname`
+DATE=`date +"%y%m%d"`
+EMPNO_ALL=/idea_backup/script/POC/empno_all.txt
+HEAD=NOWAY
+#####################################
+MYSQL=Y		####(Y/N) Y : mysql DB 사용하여 team 정보 갖고오기
+		####	  N : mysql DB 작동 하지 않을때 /idea_backup/script/image_backup/empno_all.txt 정보 참조
+#####################################
+
+if [ ${MYSQL} = "N" ]; then
+	TEAM=`cat $EMPNO_ALL | grep ${HOSTNAME} | awk {'print $2'}`
+elif [ ${MYSQL} = "Y" ]; then
+	source /idea_backup/script/MYSQL/get_user_info_TEAM.sh
+fi
+
+/idea_backup/script/USERSET/empty_trash.sh
+/idea_backup/script/TOOL/fstab_tcp.sh
+
+mount_set () {
+	local value=$1
+	mkdir -p /hppoc
+
+	POC_COUNT=`cat /etc/fstab | grep hppoc | wc -l`
+	if [ ${POC_COUNT} -eq 0 ] ; then
+		cat /etc/fstab | grep -v poc >> /home/fstab_except_poc.txt
+		echo "### poc test storage ###" >> /etc/fstab
+		echo -e "10.0.55.${value}:/nfs_test /hppoc nfs intr,hard,tcp,rw 0 0" >> /etc/fstab
+		echo -e "${GREEN}fstab${RESET}"
+		cat /etc/fstab | grep 10.0.55.${value}
+	else
+		cat /etc/fstab | grep hppoc
+	fi
+}
+
+####2D1 team 2D2 team
+if [ ${TEAM} = "2DC" ] || [ ${TEAM} = "2D1" ] || [ ${TEAM} = "2D2" ]; then
+	
+	mount_set 55
+
+####2D3 team 2D4 team
+elif [ $TEAM = 2D3 ] || [ ${TEAM} = "2D4" ]; then
+
+        mount_set 56
+
+####2D5 team 2D6 team
+elif [ $TEAM = 2D5 ] || [ ${TEAM} = "2D6" ]; then
+
+        mount_set 57
+
+####FX team
+elif [ $TEAM = FX ] ; then
+
+        mount_set 58
+
+####3D Environment team
+elif [ $TEAM = Environment ] ; then
+
+        mount_set 59
+
+####3D Lighting team Modeling
+elif [ $TEAM = Lighting ] ; then
+
+        mount_set 60
+
+elif [ $TEAM = CFX ] || [ ${TEAM} = "Modeling" ]; then
+
+	mount_set 61
+
+####3D MatchMove team
+elif [ $TEAM = MatchMove ] || [ $TEAM = Animation ] ; then
+
+        mount_set 62
+
+####pipeline team
+elif [ $TEAM = pipeline ] || [ ${TEAM} = "IT" ]; then
+
+        mount_set 63
+
+####Production Supervisor team
+elif [ $TEAM = Supervisor ] ; then
+
+        mount_set 64
+
+####Management Pm team
+elif [ $TEAM = pm_1 ] || [ $TEAM = pm_2 ]; then
+
+        mount_set 65
+
+####Management IO team
+elif [ $TEAM = Digital_Management ] || [ $TEAM = planning ] || [ $TEAM = Previz ]; then
+
+        mount_set 66
+
+fi
+
+mount /hppoc

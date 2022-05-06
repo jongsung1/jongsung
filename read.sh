@@ -9,3 +9,5 @@ UNIXTIME=`date +%s --date "$YMD $HMS"`
 echo $NOWTIME
 
 echo $UNIXTIME
+
+test

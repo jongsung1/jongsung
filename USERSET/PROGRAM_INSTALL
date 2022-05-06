@@ -1,0 +1,88 @@
+while [ 1 ] ; do
+
+echo ------------------+------------------
+#프로그램
+echo [1] : Maya 2017　 │  [2] : Nuke 10.5v
+echo [3] : mari 3.3v　 │  [4] : Equalizer
+echo [5] : Houdini 16　│  [6] : VirtualBox
+echo [7] : Clarisse 　 │  [8] : PureRef
+echo ------------------+------------------
+#옵션       
+echo [m] : Multiboot　 │  [e] : Eng Ver
+echo -------------------------------------
+#끝내기
+echo [q] : 나가기
+echo =====================================
+
+echo 설치할 프로그램 코드 입력 : 
+
+#find /idea_backup/dept/it/yhj/infra/digitalidea | grep $a
+
+read b
+ 
+case "$b" in
+"1")
+sh /netapp/INHouse/CentOS/bin/maya2017_install_cr 
+clear 
+echo 마야 설치 완료
+continue ;;
+
+"2")sh lustre3/dept/ITinfra/yhj/script/nuke.sh
+clear
+echo 누크 설치 완료
+continue ;;
+
+"3")
+sh /netapp/INHouse/CentOS/bin/mari3.4v1_install.sh 
+clear
+echo 마리 설치 완료
+continue ;;
+
+"4")
+sh /netapp/INHouse/CentOS/bin/3de4_install
+clear
+echo 이퀄라이저 설치 완료
+continue ;;
+
+"5")
+sh /netapp/INHouse/CentOS/bin/houdini_install_16.0.557_cr.sh
+sh /idea_backup/dept/it/yhj/setting/fxsetting.sh
+clear
+echo 후디니 설치 완료
+continue ;;
+
+"6")
+sh /netapp/INHouse/CentOS/bin/virtualbox_install_el7.sh
+sh /netapp/INHouse/CentOS/bin/vm_install_win7
+clear
+echo VBOX 설치 완료
+continue ;;
+
+"7")
+sh /netapp/INHouse/CentOS/bin/clarisse.sh
+clear
+echo 클라리스 설치 완료
+continue ;;
+
+"8")
+rpm -i /idea_backup/dept/it/yhj/file/PureRef-1.9.2_x64_linux.rpm
+clear
+echo Pure 설치 완료
+continue ;;
+
+"m")
+sh /idea_backup/dept/it/yhj/setting/multiboot.sh
+clear
+echo 멀티부팅 설정 완료
+continue ;;
+
+"e")
+sh /idea_backup/dept/it/yhj/setting/eng.sh
+clear
+echo 영어버전세팅완료
+continue ;;
+
+'q')
+break;;
+esac;
+done

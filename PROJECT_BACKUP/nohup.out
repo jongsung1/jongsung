@@ -1,0 +1,11 @@
+++ date +%Y%m%d
++ DATE=20220307
++ LOG_DIR=/var/log/icebackuplog/
++ LOG=/var/log/icebackuplog//icebackup_20220307.log
++ ERR_LOG=/var/log/icebackuplog//icebackup_.log
++ RSYNC=/usr/bin/rsync
++ RSYNC_OPTION='-azvh --bwlimit=40960'
++ DATA=/lustre3/show/ratking
++ BACKUP_SERVER=/lustre2/show/
++ mkdir -p /var/log/icebackuplog/
++ /usr/bin/rsync -azvh --bwlimit=40960 /lustre3/show/ratking /lustre2/show/

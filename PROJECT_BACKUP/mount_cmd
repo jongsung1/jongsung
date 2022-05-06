@@ -1,0 +1,4 @@
+
+mount /dev/sdb1 juseon_backup
+mount /deviceNAME/ PROJECT_NAME
+

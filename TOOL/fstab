@@ -1,0 +1,21 @@
+#
+# /etc/fstab
+# Created by anaconda on Wed Jul 15 06:03:30 2020
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+UUID=50d94b75-d906-4273-9840-e6615cfefebb /                       xfs     defaults        0 0
+UUID=b605216c-c7ea-4f03-9852-bd93bbd23045 /boot                   xfs     defaults        0 0
+UUID=6ad45cb5-17aa-42dc-b551-b89f653c8cd4 swap                    swap    defaults        0 0
+10.0.0.100@tcp:/lustre   /lustre lustre  defaults,_netdev        0       0
+10.0.0.150@tcp:/lustre2   /lustre2 lustre  defaults,_netdev        0       0
+10.0.0.51@tcp:10.0.0.52@tcp:10.0.0.53@tcp:10.0.0.54@tcp:/lustre3   /lustre3 lustre  defaults,_netdev       0       0
+10.0.0.44:/fg1    /netapp    nfs bg,soft,rw  0   0
+10.0.0.71:/gpfs/gs_di/backup/clib2    /clib    nfs bg,soft,rw  0   0
+10.0.0.72:/gpfs/gs_di/backup/IDEA_BACKUP    /idea_backup    nfs bg,soft,rw  0   0
+20.0.20.195:/19T/show /opt/aspera nfs bg,soft,rw 0  0
+20.0.20.40:/NewFTP /opt/ktftp2 nfs bg,soft,rw 0 0
+10.0.200.62:/pd/ /pm nfs bg,soft,rw 0 0
+10.0.200.21:/idea_backup    /old_backup    nfs bg,soft,rw  0   0
+10.0.200.59:/40T/idea_backup2    /old_backup2    nfs bg,soft,rw  0   0

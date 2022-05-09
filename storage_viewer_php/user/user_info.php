@@ -1,6 +1,6 @@
 <?
   session_start();
-  include  "C:/APM_Setup/htdocs/common/go_login.php"; 
+  //include  "C:/APM_Setup/htdocs/common/go_login.php"; 
 ?>
 <meta charset="UTF-8">
 <? 
@@ -25,6 +25,26 @@
   <div class="setup_msg" align="right">
 			<?include  "C:/APM_Setup/htdocs/common/clock.html"; ?>
 	</div>
+  <!-- /////////////////// 검색 폼 /////////////////// -->
+  <form name="search_form" action="user_info.php" method="post">
+    <table>
+      <tr>
+        <td align="center">
+          <select name="search_option" size="1">
+            <? 
+              $option_list = array('USERID'=>'사번', 'USERNAME'=>'이름', 'USERIP'=>'IP', 'TEAM'=>'TEAM',
+              'FLAG'=>'STATUS','MOUNT_FLAG'=>'mount_STATUS');
+                while(list($option, $value) = each($option_list)){
+                  echo "<option value=\"$option\">$value</option>";
+                }
+            ?>
+          </select>
+          <input type="text" name="keyword" value="<? echo $keyword ?>"><input type="submit" name="search_btn" value="검색">
+        </td>
+      </tr>
+    </table>
+  </form>
+  <!-- /////////////////// 검색 폼 /////////////////// -->
   <table cellpadding="0" cellspacing="1" border="0" width="800" bgcolor="#d7d7d7" class="info_table">
       <thead>
           <tr>
@@ -39,10 +59,43 @@
             </tr>
         </thead>
         <?
-          $query = "select USERID,USERNAME,USERIP,TEAM,FLAG,MOUNT_FLAG,DATE 
-          from USER_INFO 
-          where OS='L'
-          order by FLAG asc, MOUNT_FLAG asc , TEAM asc,SEQ asc;";
+        $query1 = "select USERID,USERNAME,USERIP,TEAM,FLAG,MOUNT_FLAG,DATE from USER_INFO ";
+        $where = "where OS='L'";
+        $order = "order by FLAG asc, MOUNT_FLAG asc , TEAM asc,SEQ asc;";
+        $query = $query1.$where.$order;
+        //////검색 추가
+          $search_option = $_POST[search_option];
+          $keyword = $_POST[keyword];
+    
+          if(strlen($keyword) > 0){
+            switch ($search_option){
+              case "USERID":
+                $where = "where OS='L' and USERID like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "USERNAME":
+                $where = "where OS='L' and USERNAME like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "USERIP":
+                $where = "where OS='L' and USERIP like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "TEAM":
+                $where = "where OS='L' and TEAM like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "FLAG":
+                $where = "where OS='L' and FLAG like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "MOUNT_FLAG":
+                $where = "where OS='L' and MOUNT_FLAG like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+            }
+          }
+        
           $sql = mysqli_query($conn,$query); 
           $i=1;
           while($board = $sql->fetch_array())
@@ -77,6 +130,7 @@
 
    
     <? echo "<br>" ?>
+    
     <!-- <div id="write_btn">
       <a href="/page/board/write.php"><button>글쓰기</button></a>
     </div> -->

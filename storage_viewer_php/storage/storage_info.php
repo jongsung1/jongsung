@@ -66,13 +66,14 @@
           <td class="info_bg" width="120" ><center><? echo $board['SIZE']=round($board['SIZE'] /$DIVISOR,2)?></center></td>
           <td class="info_bg" width="120" ><center><? echo $board['USED']=round($board['USED']/$DIVISOR,2)?></center></td>
           <td class="info_bg" width="120" ><center><? echo $board['AVAIL']=round($board['AVAIL']/$DIVISOR,2)?></center></td>
-                    
+          <td class="info_bg" width="120" ><center><? echo $board['USED_PER']?></center></td>
+          
           <?if($board['USED_PER']>"80%"){ ?>
           <td class="info_bg" width="120" style="color:red"><center><? echo $board['USED_PER']?></center></td>
           <?}else{?>
           <td class="info_bg" width="120" ><center><? echo $board['USED_PER']?></center></td>
           <?}?>
-
+          
           <td class="info_bg" width="100"><center><? echo date("Y-m-d H:i", $board['DATE'])?></center></td>
         </tr>
       </tbody>

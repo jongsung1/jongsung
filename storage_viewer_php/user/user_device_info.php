@@ -1,6 +1,6 @@
 <?
   session_start();
-  include  "C:/APM_Setup/htdocs/common/go_login.php"; 
+  //include  "C:/APM_Setup/htdocs/common/go_login.php"; 
 ?>
 <meta charset="UTF-8">
 <? 
@@ -25,6 +25,26 @@
   <div class="setup_msg" align="right">
 			<?include  "C:/APM_Setup/htdocs/common/clock.html"; ?>
 	</div>
+    <!-- /////////////////// 검색 폼 /////////////////// -->
+    <form name="search_form" action="user_device_info.php" method="post">
+    <table>
+      <tr>
+        <td align="center">
+          <select name="search_option" size="1">
+            <? 
+              $option_list = array('UI.USERID'=>'사번', 'UI.USERNAME'=>'이름', 'UI.TEAM'=>'TEAM',
+              'UDI.GPU'=>'GPU','UDI.MONITOR1'=>'MONITOR1','UDI.MONITOR2'=>'MONITOR2');
+                while(list($option, $value) = each($option_list)){
+                  echo "<option value=\"$option\">$value</option>";
+                }
+            ?>
+          </select>
+          <input type="text" name="keyword" value="<? echo $keyword ?>"><input type="submit" name="search_btn" value="검색">
+        </td>
+      </tr>
+    </table>
+  </form>
+  <!-- /////////////////// 검색 폼 /////////////////// -->
   <table cellpadding="0" cellspacing="1" border="0" width="1600" bgcolor="#d7d7d7" class="info_table">
       <thead>
           <tr>
@@ -41,13 +61,52 @@
             </tr>
         </thead>
         <?
-          $query = "select 
-          UDI.USERID,UI.USERNAME,UI.TEAM,
+          $query1 = "select UDI.USERID,UI.USERNAME,UI.TEAM,
           UDI.CPU,UDI.DISK,UDI.MEM,UDI.GPU,UDI.MONITOR1,UDI.MONITOR2,UDI.DATE 
           from USER_DEVICE_INFO as UDI 
           left join USER_INFO as UI 
-          on UDI.USERID = UI.USERID order by UI.TEAM desc;";
+          on UDI.USERID = UI.USERID ";
+          //$where = "where 1=1";
+          $order = "order by UI.TEAM desc;";
+          $query = $query1.$order;
+
+echo $query;
+          
+          //////검색 추가
+          $search_option = $_POST[search_option];
+          $keyword = $_POST[keyword];
+
+          if(strlen($keyword) > 0){
+            switch ($search_option){
+              case "UI.USERID":
+                $where = "where UI.USERID like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "UI.USERNAME":
+                $where = "where UI.USERNAME like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+                case "UI.TEAM":
+                  $where = "where UI.TEAM like '%$keyword%'";
+                  $query = $query1.$where.$order;
+                  break;
+              case "UDI.GPU":
+                $where = "where UDI.GPU like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "UDI.MONITOR1":
+                $where = "where UDI.MONITOR1 like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "UDI.MONITOR2":
+                $where = "where UDI.MONITOR2 like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+            }
+          }
+
           $sql = mysqli_query($conn,$query); 
+
           while($board = $sql->fetch_array())
           {
             //title변수에 DB에서 가져온 title을 선택

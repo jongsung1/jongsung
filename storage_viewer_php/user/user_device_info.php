@@ -1,6 +1,6 @@
 <?
   session_start();
-  //include  "C:/APM_Setup/htdocs/common/go_login.php"; 
+  include  "C:/APM_Setup/htdocs/common/go_login.php"; 
 ?>
 <meta charset="UTF-8">
 <? 
@@ -70,8 +70,6 @@
           $order = "order by UI.TEAM desc;";
           $query = $query1.$order;
 
-echo $query;
-          
           //////검색 추가
           $search_option = $_POST[search_option];
           $keyword = $_POST[keyword];

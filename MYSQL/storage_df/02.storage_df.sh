@@ -3,7 +3,7 @@
 source /idea_backup/script/default/default_conf
 #set -x
 
-DIR=/idea_backup/script/storage_df/
+DIR=/idea_backup/script/MYSQL/storage_df/
 TXT=storage_data.txt
 COUNT=`cat ${DIR}/${TXT} | wc -l`
 NOWTIME=`date +%s`

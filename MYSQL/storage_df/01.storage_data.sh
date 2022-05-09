@@ -2,7 +2,7 @@
 
 source /idea_backup/script/default/default_conf
 
-DIR=/idea_backup/script/storage_df/
+DIR=/idea_backup/script/MYSQL/storage_df/
 
 for FILE in `cat ${DIR}/df.txt`
 do

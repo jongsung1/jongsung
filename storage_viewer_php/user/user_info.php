@@ -1,6 +1,6 @@
 <?
   session_start();
-  //include  "C:/APM_Setup/htdocs/common/go_login.php"; 
+  include  "C:/APM_Setup/htdocs/common/go_login.php"; 
 ?>
 <meta charset="UTF-8">
 <? 
@@ -64,37 +64,37 @@
         $order = "order by FLAG asc, MOUNT_FLAG asc , TEAM asc,SEQ asc;";
         $query = $query1.$where.$order;
         //////검색 추가
-          $search_option = $_POST[search_option];
-          $keyword = $_POST[keyword];
+        $search_option = $_POST[search_option];
+        $keyword = $_POST[keyword];
     
-          if(strlen($keyword) > 0){
-            switch ($search_option){
-              case "USERID":
-                $where = "where OS='L' and USERID like '%$keyword%'";
-                $query = $query1.$where.$order;
-                break;
-              case "USERNAME":
-                $where = "where OS='L' and USERNAME like '%$keyword%'";
-                $query = $query1.$where.$order;
-                break;
-              case "USERIP":
-                $where = "where OS='L' and USERIP like '%$keyword%'";
-                $query = $query1.$where.$order;
-                break;
-              case "TEAM":
-                $where = "where OS='L' and TEAM like '%$keyword%'";
-                $query = $query1.$where.$order;
-                break;
-              case "FLAG":
-                $where = "where OS='L' and FLAG like '%$keyword%'";
-                $query = $query1.$where.$order;
-                break;
-              case "MOUNT_FLAG":
-                $where = "where OS='L' and MOUNT_FLAG like '%$keyword%'";
-                $query = $query1.$where.$order;
-                break;
-            }
+        if(strlen($keyword) > 0){
+          switch ($search_option){
+            case "USERID":
+              $where = "where OS='L' and USERID like '%$keyword%'";
+              $query = $query1.$where.$order;
+              break;
+            case "USERNAME":
+              $where = "where OS='L' and USERNAME like '%$keyword%'";
+              $query = $query1.$where.$order;
+              break;
+            case "USERIP":
+              $where = "where OS='L' and USERIP like '%$keyword%'";
+              $query = $query1.$where.$order;
+              break;
+            case "TEAM":
+              $where = "where OS='L' and TEAM like '%$keyword%'";
+              $query = $query1.$where.$order;
+              break;
+            case "FLAG":
+              $where = "where OS='L' and FLAG like '%$keyword%'";
+              $query = $query1.$where.$order;
+              break;
+            case "MOUNT_FLAG":
+              $where = "where OS='L' and MOUNT_FLAG like '%$keyword%'";
+              $query = $query1.$where.$order;
+              break;
           }
+        }
         
           $sql = mysqli_query($conn,$query); 
           $i=1;

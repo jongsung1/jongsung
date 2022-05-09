@@ -4,16 +4,6 @@
 	include  "C:/APM_Setup/htdocs/common/dbcon.php";
 	include  "C:/APM_Setup/htdocs/common/style.php"; 
 ?>
-<? 
-  $UNIT=T;  // 표시 용량 : 테라
-  //$UNIT=G;  // 표시 용량 : 기가
-  if($UNIT==T){ 
-    $DIVISOR=1024*1024;
-  }elseif ($UNIT==G) {
-    $DIVISOR=1024;
-  }
-?>
-
 <!doctype html>
 <head>
 <meta charset="UTF-8">
@@ -31,6 +21,50 @@
   <div class="setup_msg" align="right">
 			<?include  "C:/APM_Setup/htdocs/common/clock.html"; ?>
 	</div>
+    <!-- /////////////////// 용량 변경 폼 /////////////////// -->
+    <form name="search_form" action="storage_info.php" method="post">
+    <table>
+      <tr>
+        <td align="center">
+          <select name="search_option" size="1">
+            <? 
+              $option_list = array('T'=>'T(테라)', 'G'=>'G(기가)', 'M'=>'M(메가)');
+                while(list($option, $value) = each($option_list)){
+                  echo "<option value=\"$option\">$value</option>";
+                }
+            ?>
+          </select>
+          <input type="submit" name="search_btn" value="적용">
+        </td>
+      </tr>
+    </table>
+  </form>
+  <!-- /////////////////// 용량 변경 폼 /////////////////// -->
+  <?
+    $UNIT=T;  // 표시 용량 : 테라
+    //$UNIT=G;  // 표시 용량 : 기가
+    if($UNIT==T){ 
+      $DIVISOR=1024*1024;
+    }elseif ($UNIT==G) {
+      $DIVISOR=1024;
+    }
+
+    $search_option = $_POST[search_option];
+    switch ($search_option){
+      case "T":
+        $UNIT="T";
+        $DIVISOR=1024*1024;
+        break;
+      case "G":
+        $UNIT="G";
+        $DIVISOR=1024;
+        break;
+      case "M":
+        $UNIT="M";
+        $DIVISOR=1;
+        break;
+    }
+  ?>
   <table cellpadding="0" cellspacing="1" border="0" width="800" bgcolor="#d7d7d7" class="info_table">
       <thead>
           <tr>
@@ -66,7 +100,6 @@
           <td class="info_bg" width="120" ><center><? echo $board['SIZE']=round($board['SIZE'] /$DIVISOR,2)?></center></td>
           <td class="info_bg" width="120" ><center><? echo $board['USED']=round($board['USED']/$DIVISOR,2)?></center></td>
           <td class="info_bg" width="120" ><center><? echo $board['AVAIL']=round($board['AVAIL']/$DIVISOR,2)?></center></td>
-          <td class="info_bg" width="120" ><center><? echo $board['USED_PER']?></center></td>
           
           <?if($board['USED_PER']>"80%"){ ?>
           <td class="info_bg" width="120" style="color:red"><center><? echo $board['USED_PER']?></center></td>

@@ -97,14 +97,15 @@
         }
         
           $sql = mysqli_query($conn,$query); 
-          $i=1;
+          $i=0;
           while($board = $sql->fetch_array())
           {
+            $i=$i+1;
             $no=$i;
         ?>
       <tbody>
         <tr>
-          <td class="info_bg" width="50"><center><? echo $no; $i=$i+1;?></center></td>
+          <td class="info_bg" width="50"><center><? echo $no; ?></center></td>
           <td class="info_bg" width="50"><center><? echo $board['USERID']; ?></center></td>
           <td class="info_bg" width="70" ><center><? echo $board['USERNAME']?></center></td>
           <td class="info_bg" width="70" ><center><? echo $board['USERIP']?></center></td>
@@ -125,7 +126,12 @@
           <td class="info_bg" width="100"><center><?php echo date("Y-m-d", $board['DATE'])?></center></td>
         </tr>
       </tbody>
-      <?php } ?>
+      <?} 
+            if(strlen($keyword) > 0){
+              echo "검색 결과 : ".$i."개 <br>";
+              echo "<br>";
+            }
+      ?>
     </table>
 
    

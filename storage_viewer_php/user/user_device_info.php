@@ -84,10 +84,10 @@
                 $where = "where UI.USERNAME like '%$keyword%'";
                 $query = $query1.$where.$order;
                 break;
-                case "UI.TEAM":
-                  $where = "where UI.TEAM like '%$keyword%'";
-                  $query = $query1.$where.$order;
-                  break;
+              case "UI.TEAM":
+                $where = "where UI.TEAM like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
               case "UDI.GPU":
                 $where = "where UDI.GPU like '%$keyword%'";
                 $query = $query1.$where.$order;
@@ -104,9 +104,11 @@
           }
 
           $sql = mysqli_query($conn,$query); 
-
+          $i=0;
           while($board = $sql->fetch_array())
           {
+            $i=$i+1;
+            $no=$i;
             //title변수에 DB에서 가져온 title을 선택
             $CPU_title=substr($board['CPU'], 0,17); 
             if($CPU_title=="Intel(R) Core(TM)")
@@ -120,22 +122,28 @@
               //CPU 이름이 Intel(R) Core(TM) 으로 시작하면 Intel(R) Core(TM) 자르고 기입
               $board['GPU'] = substr($board['GPU'], 6);
             }
+            
         ?>
       <tbody>
         <tr>
           <td class="info_bg" width="70"><center><? echo $board['USERID']; ?></center></td>
-          <td class="info_bg" width="120" ><center><?php echo $board['USERNAME']?></center></td>
-          <td class="info_bg" width="120" ><center><?php echo $board['TEAM']?></center></td>
-          <td class="info_bg" width="120" ><center><?php echo $board['CPU']?></center></td>
-          <td class="info_bg" width="120" ><center><?php echo $board['DISK']?></center></td>
-          <td class="info_bg" width="50" ><center><?php echo $board['MEM']?></center></td>
-          <td class="info_bg" width="150" ><center><?php echo $board['GPU']?></center></td>
-          <td class="info_bg" width="120" ><center><?php echo $board['MONITOR1']?></center></td>
-          <td class="info_bg" width="120" ><center><?php echo $board['MONITOR2']?></center></td>
-          <td class="info_bg" width="100"><center><?php echo date("Y-m-d", $board['DATE'])?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['USERNAME']?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['TEAM']?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['CPU']?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['DISK']?></center></td>
+          <td class="info_bg" width="50" ><center><? echo $board['MEM']?></center></td>
+          <td class="info_bg" width="150" ><center><? echo $board['GPU']?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['MONITOR1']?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['MONITOR2']?></center></td>
+          <td class="info_bg" width="100"><center><? echo date("Y-m-d", $board['DATE'])?></center></td>
         </tr>
       </tbody>
-      <?php } ?>
+      <?} 
+      if(strlen($keyword) > 0){
+        echo "검색 결과 : ".$i."개 <br>";
+        echo "<br>";
+      }
+      ?>
     </table>
 
    

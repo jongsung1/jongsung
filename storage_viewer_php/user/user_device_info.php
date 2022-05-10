@@ -33,7 +33,8 @@
           <select name="search_option" size="1">
             <? 
               $option_list = array('UI.USERID'=>'사번', 'UI.USERNAME'=>'이름', 'UI.TEAM'=>'TEAM',
-              'UDI.GPU'=>'GPU','UDI.MONITOR1'=>'MONITOR1','UDI.MONITOR2'=>'MONITOR2');
+              'UDI.GPU'=>'GPU','UDI.MONITOR1'=>'MONITOR1','UDI.MONITOR2'=>'MONITOR2',
+              'UDI.RESOLUTION1'=>'1번 해상도','UDI.RESOLUTION2'=>'2번 해상도');
                 while(list($option, $value) = each($option_list)){
                   echo "<option value=\"$option\">$value</option>";
                 }
@@ -56,13 +57,16 @@
               <th class="info_category" width="70">memory</th>
               <th class="info_category" width="70">GPU</th>
               <th class="info_category" width="70">모니터1</th>
+              <th class="info_category" width="70">해상도1</th>
               <th class="info_category" width="70">모니터2</th>
+              <th class="info_category" width="70">해상도2</th>
               <th class="info_category" width="120">date</th>
             </tr>
         </thead>
         <?
           $query1 = "select UDI.USERID,UI.USERNAME,UI.TEAM,
-          UDI.CPU,UDI.DISK,UDI.MEM,UDI.GPU,UDI.MONITOR1,UDI.MONITOR2,UDI.DATE 
+          UDI.CPU,UDI.DISK,UDI.MEM,UDI.GPU,
+          UDI.MONITOR1,UDI.RESOLUTION1,UDI.MONITOR2,UDI.RESOLUTION2,UDI.DATE 
           from USER_DEVICE_INFO as UDI 
           left join USER_INFO as UI 
           on UDI.USERID = UI.USERID ";
@@ -100,9 +104,17 @@
                 $where = "where UDI.MONITOR2 like '%$keyword%'";
                 $query = $query1.$where.$order;
                 break;
+              case "UDI.RESOLUTION1":
+                $where = "where UDI.RESOLUTION1 like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
+              case "UDI.RESOLUTION2":
+                $where = "where UDI.RESOLUTION2 like '%$keyword%'";
+                $query = $query1.$where.$order;
+                break;
             }
           }
-
+          
           $sql = mysqli_query($conn,$query); 
           $i=0;
           while($board = $sql->fetch_array())
@@ -119,8 +131,14 @@
             $GPU_title=substr($board['GPU'], 0,6); 
             if($GPU_title=="NVIDIA")
             { 
-              //CPU 이름이 Intel(R) Core(TM) 으로 시작하면 Intel(R) Core(TM) 자르고 기입
+              //GPU 이름이 NVIDIA 로 시작하면 NVIDIA 자르고 기입
               $board['GPU'] = substr($board['GPU'], 6);
+            }
+            $DISK_title=substr($board['DISK'], 0,18); 
+            if($DISK_title=="Samsung based SSDs")
+            { 
+              //DISK 이름이 Samsung based SSDs 으로 시작하면 Samsung based SSDs 자르고 기입
+              $board['DISK'] = substr($board['DISK'], 18);
             }
             
         ?>
@@ -134,7 +152,9 @@
           <td class="info_bg" width="50" ><center><? echo $board['MEM']?></center></td>
           <td class="info_bg" width="150" ><center><? echo $board['GPU']?></center></td>
           <td class="info_bg" width="120" ><center><? echo $board['MONITOR1']?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['RESOLUTION1']?></center></td>
           <td class="info_bg" width="120" ><center><? echo $board['MONITOR2']?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['RESOLUTION2']?></center></td>
           <td class="info_bg" width="100"><center><? echo date("Y-m-d", $board['DATE'])?></center></td>
         </tr>
       </tbody>
@@ -146,11 +166,7 @@
       ?>
     </table>
 
-   
     <? echo "<br>" ?>
-    <!-- <div id="write_btn">
-      <a href="/page/board/write.php"><button>글쓰기</button></a>
-    </div> -->
   </div>
 </body>
 </html>

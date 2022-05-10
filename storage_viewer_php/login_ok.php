@@ -2,6 +2,7 @@
 <?
 /* 세션 실행 */
 session_start();
+
 $_SESSION["s_id"]=$_POST["USERID"];
 /* 이전 페이지에서 값 가져오기 */
 $USERID = $_POST["USERID"];
@@ -10,6 +11,7 @@ $PASSWORD = $_POST["PASSWORD"];
 
 /* DB 접속 */
 include  "C:/APM_Setup/htdocs/common/dbcon.php";
+include  "C:/APM_Setup/htdocs/common/funtion.php";
 
 /* 쿼리 작성 */
 $sql = "select ATTR, USERNAME, USERID, PASSWORD,FAIL_COUNT,FIRST_LOGIN from USER_INFO where USERID='$USERID';";
@@ -27,38 +29,19 @@ $num = mysqli_num_rows($result);
 /* 조건 처리 */
 if(!$num){ // 아이디가 존재하지 않으면
     // 메세지 출력 후 이전 페이지로 이동
-    echo "
-        <script type=\"text/javascript\">
-            alert(\"아이디 혹은 비밀번호가 일치하지 않습니다.\");
-            history.back();
-        </script>
-    ";
-    exit;
+    go_back("아이디 혹은 비밀번호가 일치하지 않습니다.");
 } else{ // 아이디가 존재하면
     // DB에서 사용자 정보 가져오기
     $array = mysqli_fetch_array($result);
-
-    if($array["FIRST_LOGIN"] == 1){ 
-        echo "
-        <script type=\"text/javascript\">
-            alert(\"패스워드를 변경하십시오\");
-            location.href = \"../password.php\";
-        </script>
-        ";
-        exit;
+    if($array["FIRST_LOGIN"] != 0){ 
+        go_target("패스워드를 변경하십시오","password.php");
     }
 
     //// FAIL_COUNT 5 이상일때 로그인 lock
     $FAIL_LIMIT = 5;
     if($array["FAIL_COUNT"] > $FAIL_LIMIT){ 
-    // 메세지 출력 후 이전 페이지로 이동
-    echo "
-        <script type=\"text/javascript\">
-            alert(\"로그인 실패 $FAIL_LIMIT 회 초과하여 로그인할 수 없습니다.\");
-            history.back();
-        </script>
-    ";
-    exit;
+        // 메세지 출력 후 이전 페이지로 이동
+        go_back("로그인 실패 $FAIL_LIMIT 회 초과하여 로그인할 수 없습니다.");
     }
 
     // $g_idx = $array["idx"];
@@ -71,18 +54,10 @@ if(!$num){ // 아이디가 존재하지 않으면
     if($PASSWORD != $g_pwd){
         $FAIL_COUNT=$array["FAIL_COUNT"]+1;
         $query = "update USER_INFO set FAIL_COUNT='$FAIL_COUNT' where USERID='$USERID'; ";
-        mysqli_query($conn, $query);
-        echo "
-            <script type=\"text/javascript\">
-                alert(\"아이디 혹은 비밀번호가 일치하지 않습니다.\");
-                history.back();
-            </script>
-        ";
-    exit;
+        mysqli_query($conn, $query);    
+        go_back("아이디 혹은 비밀번호가 일치하지 않습니다.");
     }else{ // 비밀번호가 일치한다면
-        // 세션 변수 생성
-        // $_SESSION["세션변수명"] = 저장할 값;
-        
+                
         $_SESSION["s_idx"]=$array["ATTR"];        // ATTR : 사용자 권한
         $_SESSION["s_name"]=$array["USERNAME"];
         #$_SESSION["s_id"]=$array["USERID"];
@@ -100,11 +75,7 @@ if(!$num){ // 아이디가 존재하지 않으면
         /* DB 연결 종료 */
         #mysqli_close($conn);
         /* 페이지 이동 */
-        echo "
-            <script type=\"text/javascript\">
-                location.href = \"../index_page.php\";
-            </script>
-        ";
+        go_target($_SESSION["s_name"]."님 환영합니다.","index_page.php");
     };
 };
 ?>

@@ -9,7 +9,7 @@
 </head>
 
 <body>
-	<form method="post" action="join_ok.php" onsubmit="return check()">
+	<form method="post" action="join_ok.php" onsubmit="return check_id()">
 		<h1>회원가입</h1>
 			<fieldset>
 				<legend>입력사항</legend>
@@ -19,7 +19,7 @@
 							<td><input type="text" size="35" name="userid" id="USERID" class="USERID" autofocus placeholder="아이디"></td>
 						</tr>
 						<tr>
-							<td>비밀번호</td>							
+							<td>비밀번호</td>
 							<td><input type="password" size="35" name="password1" id="PASSWORD" class="PASSWORD" placeholder="비밀번호"></td>
 						</tr>
 						<tr>

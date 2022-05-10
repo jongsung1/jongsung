@@ -12,7 +12,7 @@ $PASSWORD = $_POST["PASSWORD"];
 include  "C:/APM_Setup/htdocs/common/dbcon.php";
 
 /* 쿼리 작성 */
-$sql = "select ATTR, USERNAME, USERID, PASSWORD,FAIL_COUNT from USER_INFO where USERID='$USERID';";
+$sql = "select ATTR, USERNAME, USERID, PASSWORD,FAIL_COUNT,FIRST_LOGIN from USER_INFO where USERID='$USERID';";
 //echo $sql;
 
 /* 쿼리 전송(연결 객체) */
@@ -37,6 +37,16 @@ if(!$num){ // 아이디가 존재하지 않으면
 } else{ // 아이디가 존재하면
     // DB에서 사용자 정보 가져오기
     $array = mysqli_fetch_array($result);
+
+    if($array["FIRST_LOGIN"] == 1){ 
+        echo "
+        <script type=\"text/javascript\">
+            alert(\"패스워드를 변경하십시오\");
+            location.href = \"../password.php\";
+        </script>
+        ";
+        exit;
+    }
 
     //// FAIL_COUNT 5 이상일때 로그인 lock
     $FAIL_LIMIT = 5;

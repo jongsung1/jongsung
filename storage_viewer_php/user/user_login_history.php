@@ -60,8 +60,8 @@
           from LOGIN_HISTORY as LH 
           left join USER_INFO as UI  
           on UI.USERID = LH.USERID ";
+          $where = "where UI.USERID is not null ";
           $order = "order by LH.LOGINDATE desc;";
-          $where = "where UI.USERID is not null";
           $query = $query1.$where.$order;
 
           //////검색 추가

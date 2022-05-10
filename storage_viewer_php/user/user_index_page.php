@@ -53,7 +53,8 @@
 				<td class="info_bg"><font class="c_00"><A HREF="user_device_info.php" >user device info</A></font></td>
 			</tr>
 			<?
-				if($_SESSION["s_idx"] == 9){ ?>
+				if($_SESSION["s_idx"] == 9){ 
+			?>
 			<tr>
 				<td class="info_category">login history</td>
 				<td class="info_bg"><font class="c_00"><a href="user_login_history.php" >login history</a></font></td>

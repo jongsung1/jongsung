@@ -27,7 +27,7 @@
 	</div>
   <!-- /////////////////// 검색 폼 /////////////////// -->
   <form name="search_form" action="user_info.php" method="post">
-    <table>
+    <table align="center">
       <tr>
         <td align="center">
           <select name="search_option" size="1">
@@ -45,6 +45,31 @@
     </table>
   </form>
   <!-- /////////////////// 검색 폼 /////////////////// -->
+<?
+    if($_SESSION["s_idx"] == 9){
+?>
+    <!-- /////////////////// 삭제 폼 /////////////////// -->
+    <form name="delete_form" action="delete.php" method="post">
+    <table align="center">
+      <tr>
+        <td align="center">
+          <select name="delete_option" size="1">
+            <? 
+              $option_list = array('USERID'=>'사번');
+                while(list($option, $value) = each($option_list)){
+                  echo "<option value=\"$option\">$value</option>";
+                }
+            ?>
+          </select>
+          <input type="text" name="keyword" value="<? echo $keyword ?>"><input type="submit" name="delete_btn" value="삭제">
+        </td>
+      </tr>
+    </table>
+  </form>
+  <!-- /////////////////// 검색 폼 /////////////////// -->
+<?
+    }
+?>
   <table cellpadding="0" cellspacing="1" border="0" width="800" bgcolor="#d7d7d7" class="info_table">
       <thead>
           <tr>

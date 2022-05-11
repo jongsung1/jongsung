@@ -1,6 +1,6 @@
 
-<?php
-    $mainip = "10.0.28.20";
+<?
+    $mainip = "10.0.28.13";
 ?>
 <div class="logo"><a href="http://<?echo $mainip?>/index_page.php"><img src="./../picture/logo.PNG" alt="" border="0"></a></div>
 
@@ -63,6 +63,28 @@
         </tr>
 	</thead>
 </table>
+<?
+    if($_SESSION["s_idx"] == 9){
+?>
+<table cellpadding="0" cellspacing="1" border="0" width="650" bgcolor="#ffafaf" class="info_table">
+	<thead>
+		<tr>
+            <th class="info_category" width="70">
+                <A HREF="http://<?echo $mainip?>/user/user_info.php" >attr test</A>
+            </th>
+			<th class="info_category" width="70">
+                <A HREF="http://<?echo $mainip?>/user/user_device_info.php" >attr  device</A>
+            </th>
+        </tr>
+	</thead>
+</table>
+<?
+    }
+    ?>
+
+<li>
+    <A HREF="http://<?echo $mainip?>/logout.php" >logout</A>
+</li>
 <script>
-    setTimeout(function(){location.reload();},1800000); //30분 후 새로고침
+    setTimeout(function(){location.reload();},1800000); //30분 후 새로고침 30*60(초 환산)*1000(ms 환산)
 </script>

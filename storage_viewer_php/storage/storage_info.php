@@ -21,6 +21,25 @@
   <div class="setup_msg" align="right">
 			<?include  "C:/APM_Setup/htdocs/common/clock.html"; ?>
 	</div>
+      <!-- /////////////////// 검색 폼 /////////////////// -->
+      <form name="search1_form" action="<? echo $_SERVER['PHP_SELF']; ?>" method="post">
+      <table align="center">
+        <tr>
+          <td align="center">
+            <select name="search1_option" size="1">
+              <? 
+                $option_list = array('STORAGE_NAME'=>'STORAGE_NAME');
+                  while(list($option, $value) = each($option_list)){
+                    echo "<option value=\"$option\">$value</option>";
+                  }
+              ?>
+            </select>
+            <input type="text" name="keyword1" value="<? echo $keyword1 ?>"> <input type="submit" name="search_btn" value="검색">
+          </td>
+        </tr>
+      </table>
+    </form>
+    <!-- /////////////////// 검색 폼 /////////////////// -->
     <!-- /////////////////// 용량 변경 폼 /////////////////// -->
     <form name="search_form" action="storage_info.php" method="post">
     <table>
@@ -42,7 +61,7 @@
   <!-- /////////////////// 용량 변경 폼 /////////////////// -->
   <?
     $UNIT=T;  // 표시 용량 : 테라
-    //$UNIT=G;  // 표시 용량 : 기가
+    $DIVISOR=1024*1024;
     if($UNIT==T){ 
       $DIVISOR=1024*1024;
     }elseif ($UNIT==G) {
@@ -77,9 +96,23 @@
               <th class="info_category" width="150">날짜</th>
             </tr>
         </thead>
-        <?php
-          $query = "select * from STORAGE_INFO 
-          order by USED_PER desc, USED desc , SIZE desc;";
+        <?
+          $query1 = "select * from STORAGE_INFO ";
+          $where = "where 1=1 ";
+          $order = "order by USED_PER desc, USED desc , SIZE desc ;";
+          $query = $query1.$where.$order;
+          //////검색 추가
+          $search1_option = $_POST[search1_option];
+          $keyword1 = $_POST[keyword1];
+          if(strlen($keyword1) > 0){
+            switch ($search1_option){
+              case "STORAGE_NAME":
+                $where = "where STORAGE_NAME like '%$keyword1%'";
+                $query = $query1.$where.$order;
+                break;
+            }
+          }
+          //////검색 추가 부분 끝
           $sql = mysqli_query($conn,$query); 
           $i=1;
             while($board = $sql->fetch_array())

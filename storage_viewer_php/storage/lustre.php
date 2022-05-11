@@ -4,7 +4,15 @@
 	include  "C:/APM_Setup/htdocs/common/dbcon.php";
 	include  "C:/APM_Setup/htdocs/common/style.php"; 
 ?>
-
+<? 
+  $UNIT=T;  // 표시 용량 : 테라
+  //$UNIT=G;  // 표시 용량 : 기가
+  if($UNIT==T){ 
+    $DIVISOR=1024*1024;
+  }elseif ($UNIT==G) {
+    $DIVISOR=1024;
+  }
+?>
 
 <!doctype html>
 <head>
@@ -22,9 +30,28 @@
   <div class="setup_msg" align="right">
 			<?include  "C:/APM_Setup/htdocs/common/clock.html"; ?>
 	</div>
-
-  <!-- /////////////////// 용량 변경 폼 /////////////////// -->
-  <form name="search_form" action="lustre.php" method="post">
+  <!-- /////////////////// 검색 폼 /////////////////// -->
+  <form name="search1_form" action="lustre.php" method="post">
+    <table align="center">
+      <tr>
+        <td align="center">
+          <select name="search1_option" size="1">
+            <? 
+              $option_list = array('PROJECT_NAME'=>'PROJECT_NAME');
+                while(list($option, $value) = each($option_list)){
+                  echo "<option value=\"$option\">$value</option>";
+                }
+            ?>
+            </select>
+          <input type="text" name="keyword1" value="<? echo $keyword1 ?>"> <input type="submit" name="search_btn" value="검색">
+        </td>
+      </tr>
+    </table>
+  </form>
+  <!-- /////////////////// 검색 폼 /////////////////// -->
+    
+    <!-- /////////////////// 용량 변경 폼 /////////////////// -->
+    <form name="search_form" action="lustre.php" method="post">
     <table>
       <tr>
         <td align="center">
@@ -68,31 +95,39 @@
     }
   ?>
 
+
   <table cellpadding="0" cellspacing="1" border="0" width="580" bgcolor="#d7d7d7" class="info_table">
-      <thead>
+        <thead>
           <tr>
-              <th class="info_category" width="70">No</th>
-              <th class="info_category" width="120">PROJECT</th>
-              <th class="info_category" width="70">SIZE<? echo "(".$UNIT.")";?></th>
-              <th class="info_category" width="120">날짜</th>
-            </tr>
+            <th class="info_category" width="70">No</th>
+            <th class="info_category" width="120">PROJECT</th>
+            <th class="info_category" width="70">SIZE<? echo "(".$UNIT.")";?></th>
+            <th class="info_category" width="120">날짜</th>
+          </tr>
         </thead>
-        <?php
-          $query = "select * from PROJECT_DF_LUSTRE ";
+        <?
+          //////검색 추가
+          $search1_option = $_POST[search1_option];
+          $keyword1 = $_POST[keyword1];
+          $where = "where 1=1 ;";
+          $query1 = "select * from PROJECT_DF_LUSTRE ";
+          if(strlen($keyword1) > 0){
+            switch ($search1_option){
+              case "PROJECT_NAME":
+                $where = "where PROJECT_NAME like '%$keyword1%'";
+                $query = $query1.$where;
+                break;
+            }
+          }
+          $query = $query1.$where;
+          //////검색 추가 부분
           $sql = mysqli_query($conn,$query); 
           $i=1;
           $SUM=0;
             while($board = $sql->fetch_array())
             {
               $no=$i;
-              //title변수에 DB에서 가져온 title을 선택
               $SUM=$SUM+$board['SIZE'];
-              $title=$board["PROJECT_NAME"]; 
-              if(strlen($title)>30)
-              { 
-                //title이 30을 넘어서면 ...표시
-                $title=str_replace($board["PROJECT_NAME"],mb_substr($board["PROJECT_NAME"],0,30,"utf-8")."...",$board["PROJECT_NAME"]);
-              }
         ?>
       <tbody>
         <tr>
@@ -105,9 +140,19 @@
       <?php } ?>
     </table>
     <? echo "<br>" ?>
-    <!-- <div id="write_btn">
-      <a href="/page/board/write.php"><button>글쓰기</button></a>
-    </div> -->
+    <table cellpadding="0" cellspacing="1" border="0" width="580" bgcolor="#d7d7d7" class="info_table">
+        <thead>
+          <tr>
+            <th class="info_category" width="70">총 합<? echo "(".$UNIT.")";?></th>
+          </tr>
+        </thead>
+      <tbody>
+        <tr>
+          <td class="info_bg" width="120" ><center><?  echo $SUM=round($SUM/$DIVISOR,2); ?></center></td>
+        </tr>
+      </tbody>
+    </table>  
+    <? echo "<br>" ?> 
   </div>
 </body>
 </html>

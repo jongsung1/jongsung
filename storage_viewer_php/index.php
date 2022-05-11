@@ -13,6 +13,13 @@
   .btn{background:#fff;border:1px solid #999;font-size:14px;padding:4px 10px}
   .btn_wrap{text-align:center}
 </style>
+<?
+	include  "C:/APM_Setup/htdocs/common/funtion.php";
+  $USERIP=$_SERVER['REMOTE_ADDR'];
+  if($USERIP!="10.0.28.13"){  /// 10.0.28.13에서 접속하지 않는 사람은 10.0.28.20으로 페이지 이동
+    go_no_memtion("http://10.0.28.20/index.php");
+  }
+?>
 
 <script type="text/javascript">
   function login_check(){

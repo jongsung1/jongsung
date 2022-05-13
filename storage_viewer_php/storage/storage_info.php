@@ -96,6 +96,10 @@
               <th class="info_category" width="150">날짜</th>
             </tr>
         </thead>
+        <script> // 애니메이션 효과 변수를 위한 변수 배열 할당
+          var data_size = new Array;
+          var data_labels = new Array;
+        </script>
         <?
           $query1 = "select * from STORAGE_INFO ";
           $where = "where 1=1 ";
@@ -135,23 +139,107 @@
           <td class="info_bg" width="120" ><center><? echo $board['AVAIL']=round($board['AVAIL']/$DIVISOR,2)?></center></td>
           
           <?if($board['USED_PER']>"80%"){ ?>
-          <td class="info_bg" width="120" style="color:red"><center><? echo $board['USED_PER']?></center></td>
+          <td class="info_bg" width="120" style="color:red"><center><? echo $board['USED_PER']."%"?></center></td>
           <?}else{?>
-          <td class="info_bg" width="120" ><center><? echo $board['USED_PER']?></center></td>
+          <td class="info_bg" width="120" ><center><? echo $board['USED_PER']."%"?></center></td>
           <?}?>
+
+	        <script>
+            data_labels.push("<? echo $board['STORAGE_NAME']; ?>");
+            data_size.push("<? echo $board['USED_PER']; ?>");
+            console_log(data_size[$i]);
+          </script>
           
           <td class="info_bg" width="100"><center><? echo date("Y-m-d H:i", $board['DATE'])?></center></td>
         </tr>
       </tbody>
       <? } ?>
     </table>
-
+		<? echo "<br>" ?>
+<!--차트가 그려질 부분 시작-->
+<div style="width: 900px; height: 600px;">
+	<canvas id="myChart"></canvas>
+</div>
+  <script src="http://10.0.28.13/common/chart.js"></script>
+  <script type="text/javascript">
+            var context = document
+                .getElementById('myChart')
+                .getContext('2d');
+            var myChart = new Chart(context, {
+                type: 'bar', // 차트의 형태
+                data: { // 차트에 들어갈 데이터
+                    labels: [
+                        //x 축
+                          data_labels[0],data_labels[1],data_labels[2],data_labels[3],data_labels[4],data_labels[5],
+                          data_labels[6],data_labels[7],data_labels[8],data_labels[9],data_labels[10],data_labels[11],
+                          data_labels[12],data_labels[13],data_labels[14],data_labels[15],data_labels[16],data_labels[17]
+                    ],
+                    datasets: [
+                        { //데이터
+                            label: '스토리지 사용률', //차트 제목
+                            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+                            data: [
+                              data_size[0],data_size[1],data_size[2],data_size[3],data_size[4],data_size[5],
+                              data_size[6],data_size[7],data_size[8],data_size[9],data_size[10],data_size[11],
+                              data_size[12],data_size[13],data_size[14],data_size[15],data_size[16],data_size[17] //x축 label에 대응되는 데이터 값
+                            ],
+                            backgroundColor: [
+                                //색상
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(153, 112, 255, 0.2)',
+                                'rgba(153, 122, 255, 0.2)',
+                                'rgba(85, 112, 255, 0.2)',
+                                'rgba(255, 206, 96, 0.2)',
+                                'rgba(255, 100, 132, 0.2)',
+                                'rgba(54, 162, 245, 0.2)',
+                                'rgba(64, 162, 235, 0.2)',
+                                'rgba(154, 162, 235, 0.2)',
+                                'rgba(24, 162, 235, 0.2)',
+                                'rgba(125, 99, 132, 0.2)',
+                                'rgba(5, 162, 235, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                //경계선 색상
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 2 //경계선 굵기
+                        }/* ,
+                        {
+                            label: 'test2',
+                            fill: false,
+                            data: [
+                                8, 34, 12, 24
+                            ],
+                            backgroundColor: 'rgb(157, 109, 12)',
+                            borderColor: 'rgb(157, 109, 12)'
+                        } */
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }
+                        ]
+                    }
+                }
+            });
+        </script>
+<!--차트가 그려질 부분 끝-->
     
-    <? echo "<br>" ?>
-    <!-- <div id="write_btn">
-      <a href="/page/board/write.php"><button>글쓰기</button></a>
-    </div> -->
   </div>
-  
 </body>
 </html>

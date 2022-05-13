@@ -10,6 +10,7 @@
 ##2022-03-31 저장 디렉토리 예외처리 추가 
 ##		/lustre3/image_backup/USER 경로가 없을 경우 
 ##		/idea_backup/image_backup_temp에 저장
+##2022-05-13 백업 시작 종료 로그 DB에 저장 기존 history.txt 유지// DB 저장 여부는 MYSQL 옵션 따름
 #####################################
 
 ##conf file import
@@ -112,6 +113,15 @@ start_log (){
 	date >> $BKDIR/$HEAD/$TEAM/history.txt
 	#date +%s >> $BKDIR/$HEAD/$TEAM/history.txt
 	echo "====================" >> $BKDIR/$HEAD/$TEAM/history.txt
+	if [ ${MYSQL} = "Y" ]; then
+		BK_START=`date +%s`
+		UPDATE_SQL="update USER_INFO set BK_START=${BK_START} where USERID='${HOSTNAME}'"
+		SQL=${UPDATE_SQL}
+
+		mysql -h${MYSQLHOST} -uroot -p${PASSWORD} IDEA -e "${SQL}"
+	fi
+
+
 }
 
 finish_log (){
@@ -120,6 +130,13 @@ finish_log (){
         date >> $BKDIR/$HEAD/$TEAM/history.txt
         #date +%s >> $BKDIR/$HEAD/$TEAM/history.txt
         echo "====================" >> $BKDIR/$HEAD/$TEAM/history.txt
+        if [ ${MYSQL} = "Y" ]; then
+                BK_END=`date +%s`
+                UPDATE_SQL="update USER_INFO set BK_END=${BK_END} where USERID='${HOSTNAME}'"
+                SQL=${UPDATE_SQL}
+
+                mysql -h${MYSQLHOST} -uroot -p${PASSWORD} IDEA -e "${SQL}"
+        fi
 }
 
 sleep_1h(){

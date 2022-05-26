@@ -1,9 +1,7 @@
-<?
-  session_start();
-  include  "C:/APM_Setup/htdocs/common/go_login.php"; 
-?>
 <meta charset="UTF-8">
-<? 
+<?
+  @session_start();
+  include  "C:/APM_Setup/htdocs/common/go_login.php"; 
 	include  "C:/APM_Setup/htdocs/common/dbcon.php";
 	include  "C:/APM_Setup/htdocs/common/style.php"; 
 ?>
@@ -59,7 +57,7 @@
                 }
             ?>
             </select>
-          <input type="text" name="keyword" value="<? echo $keyword ?>"> <input type="submit" name="delete_btn" value="삭제">
+          <input type="text" name="del_keyword" value="<? echo $del_keyword ?>"> <input type="submit" name="delete_btn" value="삭제">
           </td>
         </tr>
       </table>
@@ -78,7 +76,7 @@
                   }
               ?>
             </select>
-            <input type="text" name="keyword" value="<? echo $keyword ?>"> <input type="submit" name="modify_btn" value="패스워드 초기화">
+            <input type="text" name="mod_keyword" value="<? echo $mod_keyword ?>"> <input type="submit" name="modify_btn" value="패스워드 초기화">
           </td>
         </tr>
       </table>
@@ -179,9 +177,6 @@
    
     <? echo "<br>" ?>
     
-    <!-- <div id="write_btn">
-      <a href="/page/board/write.php"><button>글쓰기</button></a>
-    </div> -->
   </div>
 </body>
 </html>

@@ -93,13 +93,14 @@
               <th class="info_category" width="70">이름</th>
               <th class="info_category" width="70">IP</th>
               <th class="info_category" width="70">TEAM</th>
+              <th class="info_category" width="60">/(%)</th>
               <th class="info_category" width="70">STATUS</th>
               <th class="info_category" width="100">mount STATUS</th>
               <th class="info_category" width="100">date</th>
             </tr>
         </thead>
         <?
-        $query1 = "select USERID,USERNAME,USERIP,TEAM,FLAG,MOUNT_FLAG,DATE from USER_INFO ";
+        $query1 = "select USERID,USERNAME,USERIP,TEAM,FLAG,MOUNT_FLAG,DATE,ROOTSIZE from USER_INFO ";
         $where = "where OS='L'";
         $order = "order by FLAG asc, MOUNT_FLAG asc , TEAM asc,SEQ asc;";
         $query = $query1.$where.$order;
@@ -150,7 +151,13 @@
           <td class="info_bg" width="70" ><center><? echo $board['USERNAME']?></center></td>
           <td class="info_bg" width="70" ><center><? echo $board['USERIP']?></center></td>
           <td class="info_bg" width="70" ><center><? echo $board['TEAM']?></center></td>
-          
+
+          <?if($board['ROOTSIZE']>"80"){ ?>
+          <td class="info_bg" width="60" style="color:red"><center><? echo $board['ROOTSIZE']."%"?></center></td>
+          <?}else{?>
+          <td class="info_bg" width="60" ><center><? echo $board['ROOTSIZE']."%"?></center></td>
+          <?}?>
+
           <?if($board["FLAG"]==0){ ?>
           <td class="info_bg" width="70" style="color:red"><center><? echo "DOWN";?></center></td>
           <?}else{?>

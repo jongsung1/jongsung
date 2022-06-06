@@ -1,4 +1,5 @@
 #######2022-01-20
+from asyncio.windows_events import NULL
 import requests
 from bs4 import BeautifulSoup as bs
 from time import time
@@ -83,8 +84,14 @@ for company in tqdm(FC.MODE.tickers.keys()):
         
         ####### 당기 순이익 - 4
         NET_PROFITS4 = change("#content > div.section.cop_analysis > div.sub_section > table > tbody > tr:nth-child(3) > td:nth-child(5)")
-        
-        if PROFITS > 0 and NET_PROFITS1 > 0 and NET_PROFITS2 > 0 and NET_PROFITS3 > 0 and NET_PROFITS4 > 0:
+
+        if FC.FILTER == "Y" or FC.FILTER == "y":
+            condition = "PROFITS > 0 and NET_PROFITS1 > 0 and NET_PROFITS2 > 0 and NET_PROFITS3 > 0 and NET_PROFITS4 > 0"
+        elif FC.FILTER == "N" or FC.FILTER == "n":
+            condition = "PROFITS is not NULL and NET_PROFITS1 is not NULL and NET_PROFITS2 is not NULL and NET_PROFITS3 is not NULL and NET_PROFITS4 is not NULL"
+
+        if condition:
+
             ####### 회사명
             COMPANYNAME = extract("#middle > div.h_company > div.wrap_company > h2 > a")
             CODE = extract("#middle > div.h_company > div.wrap_company > div > span.code")
@@ -94,10 +101,7 @@ for company in tqdm(FC.MODE.tickers.keys()):
             
             ####### 매출
             SALES = change("#content > div.section.cop_analysis > div.sub_section > table > tbody > tr:nth-child(1) > td.t_line.cell_strong")
-            #SALES = change("#content > div.section.cop_analysis > div.sub_section > table > tbody > tr:nth-child(1) > td:nth-child(4)")
-            #SALES = change("#content > div.section.cop_analysis > div.sub_section > table > tbody > tr:nth-child(1) > td:nth-child(3)")
-            
-            
+                        
             ####### 부채
             DEBT = change("#content > div.section.cop_analysis > div.sub_section > table > tbody > tr:nth-child(7) > td:nth-child(4)")
             

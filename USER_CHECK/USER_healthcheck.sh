@@ -2,57 +2,17 @@
 
 #set -x
 source /idea_backup/script/default/default_conf
+#### 사용자 정의 함수 모음
+source /idea_backup/script/HEALTHCHECK/USER_CHECK/USER_healthcheck_config.sh
 
-### renew LIST
-TABLE=USER_INFO
-PING_COUNT=3
-TIME=20
-DIR=`pwd`
-
-NOWTIME=`date +%s`
-update(){
-        SQL=${UPDATE_SQL}
-        mysql -h${MYSQLHOST} -uroot -p${PASSWORD} IDEA -e "${SQL}"
-}
-
-get_ip_by_seq(){
-        local column=$1
-        local table=$2
-        mysql -h${MYSQLHOST} -uroot -p${PASSWORD} IDEA -e "${SQL}" > ${DIR}/${table}_userip_tmp.txt
-	cat ${DIR}/${table}_userip_tmp.txt |  grep -v USERIP > userip.txt
-	rm -f ${DIR}/${table}_userip_tmp.txt
-}
-
-mysql_seq_sql(){
-        local column=$1
-        local table=$2
-        SELECT_SQL="select USERIP from ${table} where seq='${column}' and OS='L';"
-        SQL=${SELECT_SQL}
-}
-
-
-mysql_sql(){
-        local column=$1
-        local table=$2
-        SELECT_SQL="select max(${column}) from ${table} ;"
-        SQL=${SELECT_SQL}
-}
-
-get_max_seq(){
-        local column=$1
-        local table=$2
-        mysql -h${MYSQLHOST} -uroot -p${PASSWORD} IDEA -e "${SQL}" > ${DIR}/${table}_seq_tmp.txt
-        cat ${DIR}/${table}_seq_tmp.txt | grep -v ${column} > max_seq.txt
-        rm -f ${DIR}/${table}_seq_tmp.txt
-}
-
+#### USER_healthcheck_config.sh 내부 함수
 mysql_sql seq USER_INFO
 get_max_seq seq USER_INFO
 MAXCOUNT=`cat max_seq.txt`
 
 for ((var=0 ; var <= ${MAXCOUNT} ; var++));
 do
-	echo -e "${GREEN}${var} of ${MAXCOUNT}${RESET}"
+	echo -e "${GREEN} ${var} of ${MAXCOUNT} ${RESET}"
 	
 	mysql_seq_sql $var USER_INFO
 	get_ip_by_seq $var USER_INFO

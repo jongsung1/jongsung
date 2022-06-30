@@ -16,12 +16,14 @@ get_sar(){
 	if [ $column -lt 10 ] ; then
   	      column="0${column}"
 	fi
-	sar -f /var/log/sa/sa${column} | grep -v Average | grep -v CPU | grep all > tmp.txt
+	sar -f /var/log/sa/sa${column} | grep -v Average | grep -v CPU | grep -v RESTART|grep all >> tmp.txt
 }
 
 get_idle(){
 	awk -F "     " '{print $8}' tmp.txt >> ${LIST}
 }
+
+cal
 
 echo -en "${GREEN} cpu 사용률 점검 시작일 : ${RESET}"
 read START
@@ -55,7 +57,7 @@ do
 done
 
 #### 평균을 구하기 위한 나눌 수
-x=`cat ${RESULT} | wc -l` 
+x=`cat ${LIST} | wc -l` 
 
 ########################################### 수집한 idle list 더하기// 평균cpu 사용량
 a=0
@@ -71,6 +73,7 @@ echo $avr > ${FINAL}
 echo -e "${BOLD} ${START}일 부터 ${END}일 까지CPU 평균 사용량 : $avr (%) ${RESET}" 
 
 ########################################### 수집한 idle list 배열에 추가 후 값 비교// 최대 cpu 사용량
+#set -x
 i=0
 while read line 
 do

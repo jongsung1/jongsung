@@ -40,6 +40,9 @@ get_kbcached(){
 	cat ${TEMP_LIST} | awk '{print $8}' >> ${CACHE}
 }
 
+## 달력 표시
+cal
+
 echo -en "${GREEN} memory 사용률 점검 시작일 : ${RESET}"
 read START
 
@@ -60,21 +63,21 @@ do
 	get_sar ${var}
 done
 
-get_kbmemfree
+#get_kbmemfree
 get_kbmemused
 get_kbbuffers
 get_kbcached
 
-LEN=`cat ${FREE} | wc -l`
+LEN=`cat ${CACHE} | wc -l`
 
 ########################################### insert_array
 ### arr_free
-i=0
-while read line
-do
-	arr_free[$i]="$line"
-	i=$((i+1))
-done < ${FREE}
+#i=0
+#while read line
+#do
+#	arr_free[$i]="$line"
+#	i=$((i+1))
+#done < ${FREE}
 
 ### arr_cache
 i=0
@@ -100,40 +103,61 @@ do
         i=$((i+1))
 done < ${BUFFER}
 
-
-#for ((var=0 ; var < ${LEN} ; var++));
-#do
-#        echo ${arr_cache[$var]}
-#done
-
 ########################################### calculation
 ############# 평균
 TOTAL_MEM=`free | grep ^Mem | awk '{print $2}'`
 SUM=0
+SUM_non=0
 for ((var=0 ; var < ${LEN} ; var++));
 do
+	## 실질 메모리 계산
 	UP=$((${arr_used[$var]} - ${arr_buffer[$var]} - ${arr_cache[$var]}))*${MULTIPLE}
-	arr_useage[$var]="$(echo "scale=3; $UP/${TOTAL_MEM}" | bc -l)"
-	#echo ${arr_useage[$var]}
+	#arr_useage[$var]="$(echo "scale=3; $UP/${TOTAL_MEM}" | bc -l)" 
+	arr_useage[$var]="$UP"
 	SUM="$(echo "scale=3; ${arr_useage[$var]}+${SUM}" | bc -l)"
+
+	##명목상 메모리 계산
+	UP_non=${arr_used[$var]}*${MULTIPLE}
+	arr_useage_non[$var]="$UP_non"
+	SUM_non="$(echo "scale=3; ${arr_useage_non[$var]}+${SUM_non}" | bc -l)"
 done
 
-AVR=$(echo "scale=3; ${SUM}/${MULTIPLE}/${LEN}" | bc -l)
-AVR_PER=$(echo "scale=3; ${SUM}/${LEN}" | bc -l)
+## 실질 메모리 계산
+AVR=$(echo "scale=3; ${SUM}/${TOTAL_MEM}/${MULTIPLE}/${LEN}" | bc -l)
+AVR_PER=$(echo "scale=3; ${SUM}/${LEN}/${TOTAL_MEM}" | bc -l)
+
+##명목상 메모리 계산
+AVR_non=$(echo "scale=3; ${SUM_non}/${MULTIPLE}/${TOTAL_MEM}/${LEN}" | bc -l)
+AVR_PER_non=$(echo "scale=3; ${SUM_non}/${LEN}/${TOTAL_MEM}" | bc -l)
+
 ############# 최대값
 TEMP=${arr_useage[0]}
+TEMP_non=${arr_useage_non[0]}
 for ((var=0 ; var < ${LEN} ; var++));
 do
+	## 실질 메모리 계산
 	if [ `echo "${arr_useage[$var]} >= ${TEMP}" | bc` -eq "1" ] ; then
 		TEMP=${arr_useage[$var]}
 	fi
+	##명목상 메모리 계산
+	if [ `echo "${arr_useage_non[$var]} >= ${TEMP_non}" | bc` -eq "1" ] ; then
+                TEMP_non=${arr_useage_non[$var]}
+        fi
 done
-MAX=$(echo "scale=3; $TEMP/${MULTIPLE}" | bc -l)
-MAX_PER=$(echo "scale=3; $TEMP" | bc -l)
 
-echo -e "${BOLD} ${START}일 부터 ${END}일 까지평균 메모리 사용량 : ${AVR_PER} (%) ${RESET}"
-echo -e "${BOLD} ${START}일 부터 ${END}일 까지최대 메모리 사용량 : ${MAX_PER} (%) ${RESET}"
+## 실질 메모리 계산
+MAX=$(echo "scale=3; $TEMP/${MULTIPLE}/${TOTAL_MEM}" | bc -l)
+MAX_PER=$(echo "scale=3; ${MAX}*${MULTIPLE}" | bc -l)
 
+##명목상 메모리 계산
+MAX_non=$(echo "scale=3; $TEMP_non/${MULTIPLE}/${TOTAL_MEM}" | bc -l)
+MAX_PER_non=$(echo "scale=3; ${MAX_non}*${MULTIPLE}" | bc -l)
+
+echo -e "${BOLD} ${START}일 부터 ${END}일 까지 평균 메모리 사용량 : ${AVR_PER} (%) ${RESET}"
+echo -e "${BOLD} ${START}일 부터 ${END}일 까지 최대 메모리 사용량 : ${MAX_PER} (%) ${RESET}"
+
+echo -e "${BOLD} ${START}일 부터 ${END}일 까지 평균 메모리 사용량(명목) : ${AVR_PER_non} (%) ${RESET}"
+echo -e "${BOLD} ${START}일 부터 ${END}일 까지 최대 메모리 사용량(명목) : ${MAX_PER_non} (%) ${RESET}"
 
 rm -f ${TEMP_LIST}
 rm -f ${FREE}

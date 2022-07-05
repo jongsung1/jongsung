@@ -8,6 +8,9 @@ LIST=idle.txt
 RESULT=USED.txt
 FINAL=RESULT.txt
 MULLTI=100
+
+start_day="시작일"
+end_day="종료일"
 #########################################
 
 get_sar(){
@@ -23,13 +26,37 @@ get_idle(){
 	awk -F "     " '{print $8}' tmp.txt >> ${LIST}
 }
 
+effectiveness_check(){
+	local val=$1
+	local day=$2
+
+	NUM_CHECK=`echo "${val}" | grep -E ^\-?[0-9]?\.?[0-9]+$ | wc -l`
+
+	if [ ${NUM_CHECK} -eq 0 ] ; then ## NUM_CHECK = 0
+		echo -e "${RED}${val} 는 문자입니다.${RESET}"
+		exit
+	else
+		if [ ${val} -gt 31 ] ; then ## start > 31
+			echo -e "${RED}${day}이 31일보다 클 수 없습니다.${RESET}"
+			exit
+		elif [ ${val} -lt 1 ] ; then ## start < 1
+			echo -e "${RED}${day}이 1일보다 작을 수 없습니다.${RESET}"
+			exit
+		fi
+		echo ${val}
+	fi
+}
+
+
 cal
 
 echo -en "${GREEN} cpu 사용률 점검 시작일 : ${RESET}"
 read START
+effectiveness_check ${START} ${start_day}
 
 echo -en "${GREEN} cpu 사용률 점검 종료일 : ${RESET}"
 read END
+effectiveness_check ${END} ${end_day}
 
 ########################################### 시작일 종료일 유효성 검사
 CHECK=$((${END} - ${START}))

@@ -8,6 +8,7 @@ WHOAMI=`whoami`
 
 ADJOIN=/opt/ad_setup/
 PBIS=/opt/pbis/bin/
+DATE=`date +%s`
 
 if [ $WHOAMI != "root" ]; then
         ### if the user is root
@@ -15,11 +16,21 @@ if [ $WHOAMI != "root" ]; then
         exit;
 fi
 
+insert_history(){
+	TABLE=PBIS_HISTORY
+	INSERT_SQL=" INSERT INTO ${TABLE} (USERID, DATE) VALUES ('${HOSTNAME}','${DATE}') "
+	SQL=${INSERT_SQL}
+	mysql -h${MYSQLHOST} -uroot -p${PASSWORD} IDEA -e "${SQL}"
+}
+
+insert_history
+
 pbis_reinstall () {
 	if [ $WHOAMI != "root" ] ; then
 	        echo -e "${RED}you need root${RESET}"
 	else
 	        ## pbis dismiss
+		echo -e "${GREEN}It take some time${RESET}"
 	        cd $PBIS
 	        ./uninstall.sh purge
 		
@@ -32,6 +43,15 @@ pbis_reinstall () {
 	fi
 }
 
+pbis_check () {
+	PBIS_COUNT=`/opt/pbis/bin/find-user-by-name d10169@digitalidea.co.kr | grep Name | wc -l`
+	if [ ${PBIS_COUNT} == 1 ] ; then
+		echo -e "${GREEN}logout and re-check${RESET}"
+		exit;
+	fi
+}
+
+pbis_check
 echo -e "${GREEN}hostname : ${HOSTNAME}${RESET}"
 echo -ne "${GREEN}insert your employee number :  ${RESET}"
 read EMPNO
